@@ -1,6 +1,5 @@
 """
 This module builds shared parts for other modules.
-gfjtj
 """
 
 # --------------------------------------------------------------------------------
