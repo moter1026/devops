@@ -40,12 +40,6 @@ jobs:
             docker rm $CONTAINER_NAME || true
           fi
 
-          # Удаляем старый образ, чтобы точно обновился
-          docker image rm $IMAGE || true
-
-          echo "Pulling updated image..."
-          docker pull $IMAGE || exit 1
-
           echo "Starting new container..."
           docker run -d --name $CONTAINER_NAME -p 8181:8181 $IMAGE
 
