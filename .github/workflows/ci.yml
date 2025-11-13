@@ -50,3 +50,31 @@ jobs:
         except Exception as e:
             print(f'✗ UI tests import failed: {e}')
         "
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_PAT }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t ghcr.io/${{ github.repository_owner }}/devops_app_lab1:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push ghcr.io/${{ github.repository_owner }}/devops_app_lab1:latest
+
+    - name: Lint Dockerfile with Hadolint
+      uses: hadolint/hadolint-action@v2
+      with:
+        dockerfile: Dockerfile
+      continue-on-error: true
