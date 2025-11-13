@@ -74,7 +74,7 @@ jobs:
         docker push ghcr.io/${{ github.repository_owner }}/devops_app_lab1:latest
 
     - name: Lint Dockerfile with Hadolint
-      uses: hadolint/hadolint-action@v1
+      uses: hadolint/hadolint-action@v3.3.0
       with:
         dockerfile: Dockerfile
       continue-on-error: true
