@@ -30,9 +30,6 @@ jobs:
           IMAGE=ghcr.io/${{ github.repository_owner }}/devops_app_lab1:latest
           CONTAINER_NAME=devops_app_lab1
 
-          echo "Pulling latest image..."
-          docker pull $IMAGE || exit 1
-
           # Удаляем старый контейнер, если есть
           if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
             echo "Stopping old container..."
