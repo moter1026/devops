@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/moter1026/devops-app:latest
+    image: ghcr.io/moter1026/devops_app_lab1:latest
     ports:
       - "8181:8181"
     depends_on:
