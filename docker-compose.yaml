@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: ghcr.io/moter1026/devops-app:latest
     ports:
       - "8181:8181"
     depends_on:
@@ -18,6 +18,8 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 volumes:
   db_data:
