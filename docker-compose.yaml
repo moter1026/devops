@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     image: ghcr.io/moter1026/devops_app_lab1:latest
