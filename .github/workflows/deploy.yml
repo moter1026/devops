@@ -20,24 +20,21 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 2431
         script: |
-          set -e  # Останавливаться при ошибках
+          set -e
           
           cd /home/ubuntu/app
           echo "=== Starting deployment ==="
           
-          # Получаем последний код
           git fetch origin
           git reset --hard origin/docker-compose
           echo "✓ Code updated"
           
-          # Останавливаем старые контейнеры
-          docker compose down
-          echo "✓ Old containers stopped"
+          # Полная очистка
+          docker compose down --rmi all
+          echo "✓ Old containers and images removed"
           
-          # Собираем и запускаем новые
-          # Принудительная пересборка без кэша
-          docker compose build --no-cache
-          docker compose up -d
+          docker compose up -d --build
+          echo "✓ New containers started"
           echo "✓ New containers started"
           
           # Ждем запуска
