@@ -1,8 +1,8 @@
 name: Deploy with Docker Compose from GHCR
 
 on:
-  push:
-    branches: [ main, master, docker-compose ]
+  release:
+    types: [published]
 
 jobs:
   build-and-push:
