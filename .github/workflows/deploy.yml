@@ -21,7 +21,7 @@ jobs:
           cd /home/ubuntu/app
           
           # Логин в GHCR
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
           # Остановка и запуск через Docker Compose
           docker compose down
