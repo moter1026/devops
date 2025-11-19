@@ -1,8 +1,8 @@
-name: CD Deploy via Docker
+name: Deploy with Docker Compose
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ main, master ]
 
 jobs:
   deploy:
@@ -12,14 +12,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_PAT }}
-
-    - name: Deploy to server
+    - name: Deploy to VM
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: course.prafdin.ru
@@ -27,29 +20,8 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 2431
         script: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/devops_app_lab1:latest
-          CONTAINER_NAME=devops_app_lab1
-
-          # Удаляем старый контейнер, если есть
-          if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
-            echo "Stopping old container..."
-            docker stop $CONTAINER_NAME || true
-            docker rm $CONTAINER_NAME || true
-          fi
-
-          # Удаляем старый образ, чтобы точно обновился
-          docker image rm $IMAGE || true
-
-          echo "Pulling updated image..."
-          docker pull $IMAGE || exit 1
-
-          echo "Starting new container..."
-          docker run -d --name $CONTAINER_NAME -p 8181:8181 $IMAGE
-
-          sleep 5
-          if netstat -tln | grep :8181 || ss -tln | grep :8181; then
-            echo "✅ Application is running inside Docker"
-          else
-            echo "❌ Application failed to start"
-            exit 1
-          fi
+          cd /home/ubuntu/app
+          git pull
+          docker compose down
+          docker compose up -d --build
+          echo "✅ Deployment completed"
